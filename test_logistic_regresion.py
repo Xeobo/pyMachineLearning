@@ -15,8 +15,8 @@ X_full = np.insert(X_full, 0, 1, axis=1)
 
 #split datasets in 60:20:20
 indexes_for_train = [i for i in sorted(range(0,100,2) + range(1,100,10))]
-indexes_for_cv = sorted([i for i in range(0,100) if i not in indexes_for_train and i%10 <= 5])
-indexes_for_test = sorted([i for i in range(0,100) if i not in indexes_for_train and i%10 > 5])
+indexes_for_cv = ([i for i in range(0,100) if i not in indexes_for_train and i%10 <= 5])
+indexes_for_test = ([i for i in range(0,100) if i not in indexes_for_train and i%10 > 5])
 
 X_train = X_full[indexes_for_train,:]
 y_train = y_full[indexes_for_train]
@@ -52,12 +52,6 @@ plt.plot(X_plot, y_plot, c='black')
 
 plt.show()
 
-# print("x = " + str(X_plot[0]) + ", y = " + str(y_plot[0]) + ", sigmoid = " + str(algorithm.sigmoid_function(np.array([1, X_plot[0], y_plot[0]]))))
-#
-# for row,rowy  in zip(X_train, y_train):
-#     print("x1 = " + str(row) + ", sigmoid1 = " + str(algorithm.sigmoid_function(algorithm.normalize(np.array(row)))) + ", prediction: " + str(algorithm.predict(row)) + " ,rowy:" + str(rowy))
-#
-# print("predict all: " + str(algorithm.predict(X_train)))
 
 
 

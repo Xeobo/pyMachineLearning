@@ -1,5 +1,6 @@
 import numpy as np
-from linear_regression import LinearRegression
+
+from algorithms.linear_regression import LinearRegression
 
 array1 = np.array([1,2,3])
 

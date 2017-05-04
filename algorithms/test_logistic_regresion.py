@@ -1,9 +1,10 @@
-from logistic_regression import LogisticRegression
-from sklearn import datasets
-import numpy as np
 import matplotlib.pyplot as plt
-import random
+import numpy as np
+from sklearn import datasets
 
+from algorithms.logistic_regression import LogisticRegression
+
+#use iris dataset with 2 features for testing
 dataset = datasets.load_iris()
 
 #load dataset with 2 features
@@ -15,14 +16,10 @@ X_full = np.insert(X_full, 0, 1, axis=1)
 
 #split datasets in 60:20:20
 indexes_for_train = [i for i in sorted(range(0,100,2) + range(1,100,10))]
-indexes_for_cv = ([i for i in range(0,100) if i not in indexes_for_train and i%10 <= 5])
-indexes_for_test = ([i for i in range(0,100) if i not in indexes_for_train and i%10 > 5])
+indexes_for_test = ([i for i in range(0,100) if i not in indexes_for_train])
 
 X_train = X_full[indexes_for_train,:]
 y_train = y_full[indexes_for_train]
-
-X_cross_validation = X_full[indexes_for_cv,:]
-y_cross_validation = y_full[indexes_for_cv]
 
 X_test = X_full[indexes_for_test,:]
 y_test = y_full[indexes_for_test]
@@ -40,8 +37,8 @@ accuracy = np.sum(np.array(y_train) == algorithm.predict(X_train)) / float(y_tra
 print ("accuracy: " + str(accuracy))
 
 #scatter positive and example
-plt.scatter(X_test[:10, 1], X_test[:10, 2], c='b')
-plt.scatter(X_test[10:, 1], X_test[10:, 2], c='r')
+plt.scatter(X_test[:20, 1], X_test[:20, 2], c='b')
+plt.scatter(X_test[20:, 1], X_test[20:, 2], c='r')
 
 #plot decision boundery
 X_plot = np.array([4, 7])

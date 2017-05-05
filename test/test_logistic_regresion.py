@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 import numpy as np
 from sklearn import datasets
 
@@ -16,7 +15,7 @@ X_full = np.insert(X_full, 0, 1, axis=1)
 
 #split datasets in 60:20:20
 indexes_for_train = [i for i in sorted(range(0,100,2) + range(1,100,10))]
-indexes_for_test = ([i for i in range(0,100) if i not in indexes_for_train])
+indexes_for_test = [i for i in range(0,100) if i not in indexes_for_train]
 
 X_train = X_full[indexes_for_train,:]
 y_train = y_full[indexes_for_train]
@@ -36,18 +35,9 @@ algorithm.minimize_with_gradient()
 accuracy = np.sum(np.array(y_train) == algorithm.predict(X_train)) / float(y_train.size)
 print ("accuracy: " + str(accuracy))
 
-#scatter positive and example
-plt.scatter(X_test[:20, 1], X_test[:20, 2], c='b')
-plt.scatter(X_test[20:, 1], X_test[20:, 2], c='r')
 
 #plot decision boundery
-X_plot = np.array([4, 7])
-
-y_plot = -((X_plot - algorithm.mean[0]) / algorithm.deviation[0] * algorithm.get_theta()[1] + algorithm.get_theta()[0]) / algorithm.get_theta()[2] * algorithm.deviation[1] + algorithm.mean[1]
-
-plt.plot(X_plot, y_plot, c='black')
-
-plt.show()
+algorithm.plot_decision_boundary(X_test,y_test)
 
 
 

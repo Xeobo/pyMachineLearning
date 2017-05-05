@@ -1,6 +1,6 @@
 import numpy as np
 from algorithm import Algorithm
-import math
+import matplotlib.pyplot as plt
 
 class LinearRegression(Algorithm):
 
@@ -22,7 +22,22 @@ class LinearRegression(Algorithm):
 
 
     def predict(self,x):
-        np_x = np.array(x)
-        np_x[:,1:] =  (np_x[:,1:] - self.mean)/ self.deviation
+
+        np_x = self.normalize(x)
         return np_x.dot(self.theta)
 
+    def plot_data(self,X,y):
+        #set min and max values
+        x_min, x_max = X[:, 1].min() - .5, X[:, 1].max() + .5
+        #step
+        h = 0.01
+        #genetate points between min and max value
+        xx = np.arange(x_min, x_max, h)
+        #bios features
+        ones = np.ones(xx.shape)
+        #predict
+        yy = self.predict(np.c_[ones.ravel(),xx.ravel()])
+
+        plt.scatter(xx,yy, s=1)
+        plt.scatter(X[:,1], y, s=40, c=y, cmap=plt.cm.Spectral)
+        plt.show()

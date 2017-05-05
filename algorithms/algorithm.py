@@ -1,7 +1,7 @@
 import numpy as np
 from abc import ABCMeta,abstractmethod
 from time import *
-import math
+from exception.model_not_trained_exception import ModelNotTrainedException
 
 #Maximum iterations of gradient Descent
 MAX_ITERATION = 10000
@@ -34,6 +34,7 @@ class Algorithm(object):
         self.labels = np.array(labels)
         self.is_model_fit = False
         self.lambda_param = lambda_param
+        self.number_of_features = len(self.data)
 
     @abstractmethod
     def _cost_derivate(self):
@@ -67,39 +68,40 @@ class Algorithm(object):
             else:
                 np_x[1:] = self._normalize(np_x[1:])
         else:
-            raise NotImplementedError("Not gonna happen bro")
+            raise ModelNotTrainedException("To normalize features in your data set you have to train model first!")
+
         return np_x
 
     def get_theta(self):
         return self.theta
 
-    def minimize_with_gradient(self):
+    def minimize_with_gradient(self, max_iteration = MAX_ITERATION, converge_ratio = CONVERGE_RATIO):
         start = time()
+
+        self.is_model_fit = True
 
         #normalize
         self.mean = np.mean(self.data[:,1:], axis=0)
         self.deviation = np.std(self.data[:,1:], axis=0)
-
-        self.is_model_fit = True
-
-        self.data[:,1:] = self._normalize(self.data[:,1:])
+        self.data = self.normalize(self.data)
 
         new_cost = self.cost_function()
-        for i in range(0,MAX_ITERATION):
+        for i in range(0,max_iteration):
             old_cost = new_cost
 
             self.theta = self._calculate_new_theta()
-
             new_cost = self.cost_function()
 
-            if i%100:
-                print("Current cost: " + str(new_cost) + ", old cost:" + str(old_cost) + ", abs: " + str(abs(old_cost - new_cost)))
 
-            if abs(old_cost - new_cost) < CONVERGE_RATIO:
+            abs_diff = abs(old_cost - new_cost)
+            if i%100:
+                print("Current cost: " + str(new_cost) + ", old cost:" + str(old_cost) + ", abs: " + str(abs_diff))
+
+            if  abs_diff < converge_ratio:
                 break
 
         print("=================================")
-        print("Algorithm minimized with cost: " + str(new_cost) + "in " + str(i) + " steps, in " + str(time() - start) + " s." )
+        print("Algorithm minimized with cost: " + str(new_cost) + "in " + str(i) + " steps, in " + str(time() - start) + " s.")
         print("Minimized theta: " + str(self.theta))
         print("=================================")
 
